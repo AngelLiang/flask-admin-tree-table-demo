@@ -29,6 +29,10 @@ app.config['SECRET_KEY'] = '123456790'
 # model
 
 class Tree(db.Model, BaseNestedSets):
+    """混入了 BaseNestedSets ， 使用“左右值树”数据结构来处理树状数据"""
+
+    __tablename__ = 'tree'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
 
