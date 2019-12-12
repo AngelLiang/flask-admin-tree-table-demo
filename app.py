@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 # extensions
 
 db = SQLAlchemy()
+# 因为依赖 bootstrap3， 所以一定要设置 template_mode='bootstrap3'
 admin = Admin(template_mode='bootstrap3')
 
 
@@ -49,16 +50,28 @@ def tree2schema(tree):
 # admin view
 
 
-class TreeGridConfigMixin(object):
-    page_size = None  # 禁止分页，直接获取该数据表所有数据
-    can_set_page_size = False  # 禁止设置每页显示的数量
-    column_sortable_list = []  # 禁止任何字段的排序，以免干扰 treegrid 显示正确的数据顺序
-    column_default_sort = 'left'  # 默认以 left 字段排序，使 treegrid 能正确显示树形表格
+class TreeTableConfigMixin(object):
+    """树形表格专用配置混入类"""
+    # 设置 list_template
+    list_template = 'admin/model/tree_table.html'
+
+    # 禁止分页，直接获取该数据表所有数据
+    page_size = None
+
+    # 禁止设置每页显示的数量
+    can_set_page_size = False
+
+    # 禁止任何字段的排序，以免干扰 treegrid.js 显示正确的数据顺序
+    column_sortable_list = []
+
+    # 默认以 left 字段排序，使 treegrid.js 能正确显示树形表格
+    column_default_sort = 'left'
 
 
-class TreeView(TreeGridConfigMixin, ModelView):
-    list_template = 'admin/model/tree_list_by_treegrid.html'
-
+class TreeView(TreeTableConfigMixin, ModelView):
+    """
+    注意 TreeTableConfigMixin 要放在 ModelView 前面
+    """
     column_display_pk = True
     column_list = ['id', 'name', 'left',
                    'right', 'parent_id', 'level', 'tree_id']
