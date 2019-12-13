@@ -21,8 +21,7 @@ db.app = app
 admin.init_app(app)
 
 app.config['SECRET_KEY'] = '123456790'
-# Create in-memory database
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'data.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite'
 
 
 ####################################################################
